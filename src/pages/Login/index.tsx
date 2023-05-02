@@ -1,14 +1,8 @@
 import type { Component } from "solid-js";
-import {
-  Box,
-  Card,
-  Container,
-  Typography,
-  TextField,
-  Button,
-} from "@suid/material";
-import { AccountCircle, Key } from "@suid/icons-material";
-import { A } from "@solidjs/router";
+import { Box, Card, Container } from "@suid/material";
+import { Outlet } from "@solidjs/router";
+import CreateAccountForm from "./CreateAccountForm";
+import LoginForm from "./LoginForm";
 
 const LoginPage = () => {
   return (
@@ -42,52 +36,7 @@ const LoginPage = () => {
               padding: 4,
             }}
           >
-            <Box>
-              <Typography variant="h2">Login</Typography>
-            </Box>
-            <Box
-              as="form"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 1,
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                <AccountCircle />
-                <TextField required label="Username" variant="standard" />
-              </Box>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Key />
-                <TextField
-                  required
-                  label="Password"
-                  type="password"
-                  autoComplete="current-password"
-                  variant="standard"
-                />
-              </Box>
-              <Button variant="contained" color="primary">
-                Login
-              </Button>
-              <Typography variant="caption" fontStyle="italic" align="center">
-                Don't have an account? Create One!
-              </Typography>
-              <Button
-                as={A}
-                variant="contained"
-                color="secondary"
-                href="/create-account"
-              >
-                Create an Account
-              </Button>
-            </Box>
+            <Outlet />
           </Card>
         </Box>
       </Container>
@@ -96,3 +45,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+export { LoginForm, CreateAccountForm };

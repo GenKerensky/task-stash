@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [suidPlugin(), solidPlugin(), VitePWA({registerType: 'autoUpdate', 
   injectRegister: 'inline',
   devOptions: {
-    enabled: true,
+    enabled: false,
   }})],
   server: {
     port: 3000,
