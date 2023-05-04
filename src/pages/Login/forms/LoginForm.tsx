@@ -1,25 +1,15 @@
-import { Component, createMemo } from "solid-js";
+import { A } from "@solidjs/router";
+import { Key, Mail } from "@suid/icons-material";
 import { Box, Button, TextField, Typography } from "@suid/material";
-import { AccountCircle, Key } from "@suid/icons-material";
-import { A, useLocation } from "@solidjs/router";
+
+import FormContainer from "../components/FormContainer";
+import TopBar from "../components/TopBar";
 
 const LoginForm = () => {
-  const location = useLocation();
-  const pathname = createMemo(() => location.pathname);
-
   return (
-    <>
-      <Box>
-        <Typography variant="h2">Login</Typography>
-      </Box>
-      <Box
-        as="form"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-        }}
-      >
+    <div>
+      <TopBar title="Login" />
+      <FormContainer>
         <Box
           sx={{
             display: "flex",
@@ -27,8 +17,8 @@ const LoginForm = () => {
             gap: 2,
           }}
         >
-          <AccountCircle />
-          <TextField required label="Username" variant="standard" />
+          <Mail />
+          <TextField required label="Email" variant="standard" />
         </Box>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Key />
@@ -47,15 +37,15 @@ const LoginForm = () => {
           Don't have an account? Create One!
         </Typography>
         <Button
-          as={A}
+          component={A}
           variant="contained"
           color="secondary"
-          href={`${pathname()}/create-account`}
+          href="/create-account"
         >
           Create an Account
         </Button>
-      </Box>
-    </>
+      </FormContainer>
+    </div>
   );
 };
 

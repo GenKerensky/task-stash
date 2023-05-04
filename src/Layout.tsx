@@ -1,27 +1,26 @@
-import type { Component, JSXElement } from "solid-js";
-import { Outlet } from "@solidjs/router";
+import { Outlet, useNavigate } from "@solidjs/router";
+import {
+  AccountCircle,
+  Mail as MailIcon,
+  Menu as MenuIcon,
+  More as MoreIcon,
+  Notifications as NotificationsIcon,
+  Search as SearchIcon,
+} from "@suid/icons-material";
 import {
   alpha,
   AppBar,
+  Badge,
   Box,
   Container,
   IconButton,
-  Badge,
   InputBase,
   styled,
   Toolbar,
   Typography,
 } from "@suid/material";
-import {
-  Menu as MenuIcon,
-  Search as SearchIcon,
-  Mail as MailIcon,
-  Notifications as NotificationsIcon,
-  AccountCircle,
-  More as MoreIcon,
-} from "@suid/icons-material";
-import { useNavigate } from "@solidjs/router";
 
+import type { Component, JSXElement } from "solid-js";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
