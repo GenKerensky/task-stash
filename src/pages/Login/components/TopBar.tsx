@@ -1,18 +1,18 @@
-import { Grid, Typography } from "@suid/material";
-import { JSX } from "solid-js";
+import { Grid, Typography } from '@suid/material';
+import { type Component, type JSX } from 'solid-js';
 
-export type TopBarProps = {
-  title: string;
-  leftButton?: JSX.Element;
-  rightButton?: JSX.Element;
-};
+export interface TopBarProps {
+  title: string
+  leftButton?: JSX.Element
+  rightButton?: JSX.Element
+}
 
-const TopBar = (props: TopBarProps) => (
+const TopBar: Component<TopBarProps> = (props) => (
   <Grid
     container
     sx={{
-      borderBottom: "1px solid",
-      borderColor: "primary.main",
+      borderBottom: '1px solid',
+      borderColor: 'primary.main',
       padding: 1,
     }}
   >

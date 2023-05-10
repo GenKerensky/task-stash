@@ -1,11 +1,11 @@
-import { Route, Routes } from "@solidjs/router";
-import { Box } from "@suid/material";
+import { Route, Routes } from '@solidjs/router';
+import { Box } from '@suid/material';
+import type { Component } from 'solid-js';
 
-import Layout from "./Layout";
-import LoginPage, { CreateAccountForm, LoginForm } from "./pages/Login";
-import ReloadPrompt from "./ReloadPrompt";
+import Layout from './Layout';
+import LoginPage, { CreateAccountForm, LoginForm } from './pages/Login';
+import ReloadPrompt from './ReloadPrompt';
 
-import type { Component } from "solid-js";
 const App: Component = () => {
   return (
     <>

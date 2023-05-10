@@ -1,15 +1,16 @@
-import { JSX } from "solid-js";
-import { Box } from "@suid/material";
+import { Box } from '@suid/material';
+import { type Component, type JSX } from 'solid-js';
 
-const FormContainer = (props: JSX.FormHTMLAttributes<HTMLDivElement>) => (
+const FormContainer: Component<JSX.FormHTMLAttributes<HTMLFormElement>> = (props) => (
   <Box
-    as="form"
     {...props}
-    sx={{
-      display: "flex",
-      flexDirection: "column",
+    component="form"
+    sx={{      
+      display: 'flex',
+      flexDirection: 'column',
       gap: 2,
       padding: 2,
+      maxWidth: 242,
     }}
   />
 );
