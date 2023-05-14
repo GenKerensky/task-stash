@@ -1,13 +1,29 @@
-import { generateKey,type SerializedKeyPair } from 'openpgp';
+import { generateKey } from 'openpgp';
+import { pbkdf2 } from 'pbkdf2';
 
-export const newKey = async (email: string, passphrase: string, name?: string):Promise<SerializedKeyPair<string> & {
-  revocationCertificate: string;
-}> => {
+import { UserKeys } from '../types/UserKeys';
+
+export const asyncPBKDF2 = async (str: string, salt: string): Promise<string> =>
+  new Promise((resolve, reject) => {
+    pbkdf2(str, salt, 100000, 64, (err, derivedKey) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(derivedKey.toString('hex'));
+      }
+    });
+  });
+
+export const newKeyPair = async (
+  email: string,
+  passphrase: string,
+  name?: string
+): Promise<UserKeys> => {
   if (passphrase.length < 8) {
     throw new Error('Passphrase must be at least 8 character long');
   }
 
-  return await generateKey({
+  return generateKey({
     type: 'ecc',
     curve: 'p521',
     userIDs: [

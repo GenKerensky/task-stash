@@ -5,15 +5,19 @@ import { ArrowBack, Key, Mail } from '@suid/icons-material';
 import {
   Box,
   Button,
+  CircularProgress,
   IconButton,
   LinearProgress,
+  List,
+  ListItem,
   TextField,
   Typography,
 } from '@suid/material';
-import { type Component, createEffect } from 'solid-js';
+import { type Component, createSignal, For } from 'solid-js';
 import { z } from 'zod';
 import zxcvbn, { type ZXCVBNResult } from 'zxcvbn';
 
+import { createAccount } from '../../../controlers/createAccount';
 import FormContainer from '../components/FormContainer';
 import TopBar from '../components/TopBar';
 
@@ -49,16 +53,25 @@ const schema = z.object({
 });
 
 const CreateAccountForm: Component = () => {
+  const [loading, setLoading] = createSignal(false);
+
   const { form, data, errors, isValid } = createForm<z.infer<typeof schema>>({
     validate: validateSchema(schema),
     debounced: {
       validateTimeout: 250,
     },
-  });
-
-  createEffect(() => {
-    console.log(data());
-    console.log(errors());
+    onSubmit: (values) => {
+      setLoading(true);
+      return createAccount(values.email, values.password);
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onSuccess: async (response, context) => {
+      setLoading(false);
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onError: async (err, context) => {
+      setLoading(false);
+    },
   });
 
   const passwordComplexity = (): ZXCVBNResult | undefined =>
@@ -74,20 +87,17 @@ const CreateAccountForm: Component = () => {
   };
 
   const passwordComplexityColor = ():
-  | 'success'
-  | 'primary'
-  | 'warning'
-  | 'error' =>
+    | 'success'
+    | 'primary'
+    | 'warning'
+    | 'error' =>
     passwordComplexityScore() >= 75
       ? 'success'
       : passwordComplexityScore() >= 50 || data((d) => d.password?.length) === 0
-        ? 'primary'
-        : passwordComplexityScore() >= 25
-          ? 'warning'
-          : 'error';
-
-  const passwordSuggestions = (): string[] | undefined =>
-    passwordComplexity()?.feedback.suggestions;
+      ? 'primary'
+      : passwordComplexityScore() >= 25
+      ? 'warning'
+      : 'error';
 
   return (
     <>
@@ -126,22 +136,38 @@ const CreateAccountForm: Component = () => {
             />
           </Box>
           <Typography>
-            Password Strength: <LinearProgress            
+            Password Strength:{' '}
+            <LinearProgress
               variant="determinate"
               color={passwordComplexityColor()}
               value={passwordComplexityScore()}
             />
-          </Typography>          
-          <Typography variant="caption" fontStyle="italic" flexWrap="wrap">
-            {passwordSuggestions()}
           </Typography>
+          <List>
+            <For each={passwordComplexity()?.feedback.suggestions}>
+              {(suggestion) => (
+                <ListItem disableGutters disablePadding>
+                  <Typography variant="caption" fontStyle="italic">
+                    {suggestion}
+                  </Typography>
+                </ListItem>
+              )}
+            </For>
+          </List>
           <Button
             disabled={!isValid()}
             variant="contained"
             color="primary"
             type="submit"
           >
-            Create Account
+            {loading() ? (
+              <>
+                <CircularProgress size={24} sx={{ color: 'white' }} />
+                Creating account...
+              </>
+            ) : (
+              'Create Account'
+            )}
           </Button>
         </FormContainer>
       </Box>
