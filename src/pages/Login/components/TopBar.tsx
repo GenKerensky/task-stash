@@ -2,9 +2,9 @@ import { Grid, Typography } from '@suid/material';
 import { type Component, type JSX } from 'solid-js';
 
 export interface TopBarProps {
-  title: string
-  leftButton?: JSX.Element
-  rightButton?: JSX.Element
+  title: string;
+  leftButton?: JSX.Element;
+  rightButton?: JSX.Element;
 }
 
 const TopBar: Component<TopBarProps> = (props) => (

@@ -28,7 +28,7 @@ const schemaTyped = toTypedRxJsonSchema(notificationsSchemaLiteral);
 
 export type NotificationDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof schemaTyped
-> & { data: Record<string, any> };
+> & { data: Record<string, unknown> };
 
 export const notificationsSchema: RxJsonSchema<NotificationDocType> =
   notificationsSchemaLiteral;

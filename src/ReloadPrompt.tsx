@@ -9,19 +9,17 @@ const ReloadPrompt: Component = () => {
   const updateInterval = 1000 * 60 * 60 * 1; // 1 hours
 
   const {
-    offlineReady: [ offlineReady, setOfflineReady ],
-    needRefresh: [ needRefresh, setNeedRefresh ],
+    offlineReady: [offlineReady, setOfflineReady],
+    needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegisteredSW (swScriptUrl, registration) {
+    onRegisteredSW(swScriptUrl, registration) {
       console.log('Registered Service Worker:', swScriptUrl, registration);
-      interval(updateInterval).subscribe(
-        () => {
-          registration?.update()
-        },
-      );
+      interval(updateInterval).subscribe(() => {
+        registration?.update();
+      });
     },
-    onRegisterError (error) {
+    onRegisterError(error) {
       console.log('SW registration error', error);
     },
   });
@@ -50,12 +48,19 @@ const ReloadPrompt: Component = () => {
           <Show when={needRefresh()}>
             <button
               class={styles.ToastButton}
-              onClick={() => { updateServiceWorker(true) } }
+              onClick={() => {
+                updateServiceWorker(true);
+              }}
             >
               Reload
             </button>
           </Show>
-          <button class={styles.ToastButton} onClick={() => { close(); }}>
+          <button
+            class={styles.ToastButton}
+            onClick={() => {
+              close();
+            }}
+          >
             Close
           </button>
         </div>
