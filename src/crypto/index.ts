@@ -1,18 +1,30 @@
+import { argon2id } from 'hash-wasm';
 import { generateKey } from 'openpgp';
-import { pbkdf2 } from 'pbkdf2';
 
 import { UserKeys } from '../types/UserKeys';
 
-export const asyncPBKDF2 = async (str: string, salt: string): Promise<string> =>
-  new Promise((resolve, reject) => {
-    pbkdf2(str, salt, 100000, 64, (err, derivedKey) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(derivedKey.toString('hex'));
-      }
-    });
+export const deriveKeyFromPassword = async (
+  passwordString: string,
+  salt: string
+): Promise<string> => {
+  const normalizedString = passwordString.normalize('NFKC');
+  const saltBytes = hexToUint8(salt);
+  const threads = navigator.hardwareConcurrency || 1;
+  console.log(`Browser reports ${threads} threads available`);
+  const timeTracker = 'deriveKeyFromPassword';
+  console.time(timeTracker);
+  const key = await argon2id({
+    password: normalizedString,
+    salt: saltBytes,
+    parallelism: threads,
+    iterations: 5,
+    memorySize: 1024 * 32, // 32MB of memory
+    hashLength: 32,
+    outputType: 'hex',
   });
+  console.timeEnd(timeTracker);
+  return key;
+};
 
 export const newKeyPair = async (
   email: string,
@@ -33,3 +45,34 @@ export const newKeyPair = async (
     format: 'armored',
   });
 };
+
+export const generateRandomBytes = (numberOfBytes: number) =>
+  window.crypto.getRandomValues(new Uint8Array(numberOfBytes));
+
+export const uint8toHex = (byteArray: Uint8Array) => {
+  const hexString = Array.from(byteArray)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+  return hexString;
+};
+
+export const hexToUint8 = (hexString: string) => {
+  const byteArray = new Uint8Array(hexString.length / 2);
+  for (let i = 0; i < byteArray.length; i++) {
+    const stringStartIndex = i * 2;
+    const stringEndIndex = stringStartIndex + 2;
+    byteArray[i] = parseInt(
+      hexString.substring(stringStartIndex, stringEndIndex),
+      16
+    );
+  }
+  return byteArray;
+};
+
+/**
+ * Generates a random salt, 128 bits by default
+ * @param numberOfBytes
+ * @returns Hex encoded string of randomly generated data
+ */
+export const generateSalt = (numberOfBytes = 16) =>
+  uint8toHex(generateRandomBytes(numberOfBytes));

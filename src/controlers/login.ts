@@ -6,7 +6,7 @@ import {
 } from 'secure-remote-password/client';
 
 import * as api from '../api';
-import { asyncPBKDF2 } from '../crypto';
+import { deriveKeyFromPassword } from '../crypto';
 import { initializeRxDB } from '../data';
 
 export const login = async (email: string, password: string) => {
@@ -26,7 +26,7 @@ export const login = async (email: string, password: string) => {
     serverPublicEphemeral: string;
   };
 
-  const passphrase = await asyncPBKDF2(password, salt);
+  const passphrase = await deriveKeyFromPassword(password, salt);
   const privateKey = derivePrivateKey(salt, email, passphrase);
   const clientSession = deriveSession(
     clientEphemeral.secret,
