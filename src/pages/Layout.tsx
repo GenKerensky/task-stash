@@ -21,6 +21,8 @@ import {
 } from '@suid/material';
 import type { Component } from 'solid-js';
 
+import { currentUser } from '../controlers/user';
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -62,11 +64,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Layout: Component = () => {
-  const loggedIn = false;
-
   const navigation = useNavigate();
 
-  if (!loggedIn) {
+  if (!currentUser()) {
     navigation('/login', { replace: true });
   }
 

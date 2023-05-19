@@ -1,6 +1,9 @@
-import { createRxDatabase, RxDatabase } from 'rxdb';
+import { addRxPlugin, createRxDatabase, RxDatabase } from 'rxdb';
+import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
 import { wrappedKeyEncryptionCryptoJsStorage } from 'rxdb/plugins/encryption-crypto-js';
-import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
+import { wrappedKeyCompressionStorage } from 'rxdb/plugins/key-compression';
+// import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
+import { getRxStorageMemory } from 'rxdb/plugins/storage-memory';
 import { Subject } from 'rxjs';
 
 import { AccountsCollection, accountsSchema } from './rxSchemas/accounts';
@@ -8,12 +11,16 @@ import {
   NotificationsCollection,
   notificationsSchema,
 } from './rxSchemas/notifications';
+import { StashesCollection, stashesSchema } from './rxSchemas/stash';
 import { TasksCollection, tasksSchema } from './rxSchemas/task';
+
+addRxPlugin(RxDBDevModePlugin);
 
 type TaskStashDatabaseCollections = {
   accounts: AccountsCollection;
   notifications: NotificationsCollection;
   tasks: TasksCollection;
+  stashes: StashesCollection;
 };
 export type TaskStashDatabase = RxDatabase<TaskStashDatabaseCollections>;
 
@@ -36,15 +43,19 @@ export const db = new Promise<TaskStashDatabase>((resolve, reject) => {
 });
 
 export const initializeRxDB = async (
-  username: string,
+  email: string,
   privateKey: string
 ): Promise<TaskStashDatabase> => {
   db$.next({ db: null, status: 'initializing' });
   try {
+    const cleanedEmail = email.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
     const rxdb = await createRxDatabase<TaskStashDatabaseCollections>({
-      name: `${username}-task-stash-db`,
+      name: `${cleanedEmail}-task-stash-db`,
       storage: wrappedKeyEncryptionCryptoJsStorage({
-        storage: getRxStorageDexie(),
+        storage: wrappedKeyCompressionStorage({
+          // storage: getRxStorageDexie(),
+          storage: getRxStorageMemory(),
+        }),
       }),
       password: privateKey,
     });
@@ -58,6 +69,9 @@ export const initializeRxDB = async (
       },
       tasks: {
         schema: tasksSchema,
+      },
+      stashes: {
+        schema: stashesSchema,
       },
     });
 

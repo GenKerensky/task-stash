@@ -57,9 +57,6 @@ devDependencies:
   '@openpgp/web-stream-tools':
     specifier: ^0.0.13
     version: 0.0.13(typescript@5.0.4)
-  '@types/pbkdf2':
-    specifier: ^3.1.0
-    version: 3.1.0
   '@types/zxcvbn':
     specifier: ^4.4.1
     version: 4.4.1
@@ -2537,12 +2534,6 @@ packages:
 
   /@types/node@18.16.3:
     resolution: {integrity: sha512-OPs5WnnT1xkCBiuQrZA4+YAV4HEJejmHneyraIaxsbev5yCEr6KMwINNFP9wQeFIw8FWcoTqF3vQsa5CDaI+8Q==}
-
-  /@types/pbkdf2@3.1.0:
-    resolution: {integrity: sha512-Cf63Rv7jCQ0LaL8tNXmEyqTHuIJxRdlS5vMh1mj5voN4+QFhVZnlZruezqpWYDiJ8UTzhP0VmeLXCmBk66YrMQ==}
-    dependencies:
-      '@types/node': 18.16.3
-    dev: true
 
   /@types/qs@6.9.7:
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}

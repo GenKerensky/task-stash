@@ -2,7 +2,7 @@ import { Route, Routes } from '@solidjs/router';
 import { Box } from '@suid/material';
 import type { Component } from 'solid-js';
 
-import Layout from './Layout';
+import Layout from './pages/Layout';
 import LoginPage, { CreateAccountForm, LoginForm } from './pages/Login';
 import ReloadPrompt from './ReloadPrompt';
 

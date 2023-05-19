@@ -13,7 +13,8 @@ export const notificationsSchemaLiteral = {
   primaryKey: 'id',
   type: 'object',
   properties: {
-    id: { type: 'string' },
+    id: { type: 'string', maxLength: 12 },
+    for: { type: 'string' },
     title: { type: 'string' },
     body: { type: 'string' },
     icon: { type: 'string' },

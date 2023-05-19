@@ -1,6 +1,46 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { deriveSession } from 'secure-remote-password/server';
 
-export const generateSession = async (params: { clientSessionProof: string }) =>
-  ({
-    status: 200,
-  } as Response);
+import {
+  accounts,
+  clientEmail,
+  clientPublicEphemeral,
+  serverPrivateEphemeral,
+  setServerSessionKey,
+} from './data';
+
+export const generateSession = async (params: {
+  clientSessionProof: string;
+}) => {
+  const account = accounts.get(clientEmail);
+
+  if (account) {
+    const serverSession = deriveSession(
+      serverPrivateEphemeral,
+      clientPublicEphemeral,
+      account.salt,
+      account.email,
+      account.verifier,
+      params.clientSessionProof
+    );
+    setServerSessionKey(serverSession.key);
+    const response = {
+      serverSessionProof: serverSession.proof,
+      user: account,
+    };
+    console.log({ params, response });
+    return {
+      status: 200,
+      ok: true,
+      statusText: 'OK',
+      json: async () => response,
+    } as Response;
+  }
+
+  const response = {
+    status: 401,
+    ok: false,
+    statusText: 'Unauthorized',
+  } as Response;
+  console.log({ params, response });
+  return response;
+};

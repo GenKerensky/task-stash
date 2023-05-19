@@ -1,3 +1,4 @@
+import { decryptKey, readKey, readPrivateKey } from 'openpgp';
 import {
   derivePrivateKey,
   deriveSession,
@@ -8,6 +9,7 @@ import {
 import * as api from '../api';
 import { deriveKeyFromPassword } from '../crypto';
 import { initializeRxDB } from '../data';
+import { currentUser$ } from './user';
 
 export const login = async (email: string, password: string) => {
   const clientEphemeral = generateEphemeral();
@@ -44,13 +46,28 @@ export const login = async (email: string, password: string) => {
     throw new Error(sessionResponse.statusText);
   }
 
-  const { serverSessionProof } = (await sessionResponse.json()) as {
+  const { serverSessionProof, user } = (await sessionResponse.json()) as {
     serverSessionProof: string;
+    user: {
+      email: string;
+      publicKey: string;
+      privateKey: string;
+    };
   };
 
   verifySession(clientEphemeral.public, clientSession, serverSessionProof);
 
   await initializeRxDB(email, passphrase);
+
+  currentUser$.next({
+    email: user.email,
+    publicKey: await readKey({ armoredKey: user.publicKey }),
+    privateKey: await decryptKey({
+      privateKey: await readPrivateKey({ armoredKey: user.privateKey }),
+      passphrase,
+    }),
+    accountKey: passphrase,
+  });
 
   return sessionResponse.statusText;
 };

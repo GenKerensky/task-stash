@@ -13,7 +13,7 @@ export const accountsSchemaLiteral = {
   primaryKey: 'email',
   type: 'object',
   properties: {
-    email: { type: 'string', format: 'email' },
+    email: { type: 'string', format: 'email', maxLength: 255 },
     publicKey: { type: 'string' },
     privateKey: { type: 'string' },
     salt: { type: 'string' },

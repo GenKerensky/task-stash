@@ -1,3 +1,4 @@
+import { decryptKey, readKey, readPrivateKey } from 'openpgp';
 import {
   derivePrivateKey,
   deriveVerifier,
@@ -6,6 +7,7 @@ import {
 import * as api from '../api';
 import { deriveKeyFromPassword, generateSalt, newKeyPair } from '../crypto';
 import { initializeRxDB } from '../data';
+import { currentUser$ } from './user';
 
 export const createAccount = async (email: string, password: string) => {
   // 128 bits of random data from CryptoSubtle browser API
@@ -29,6 +31,16 @@ export const createAccount = async (email: string, password: string) => {
   }
 
   await initializeRxDB(email, key);
+
+  currentUser$.next({
+    email,
+    publicKey: await readKey({ armoredKey: publicKey }),
+    privateKey: await decryptKey({
+      privateKey: await readPrivateKey({ armoredKey: privateKey }),
+      passphrase: key,
+    }),
+    accountKey: key,
+  });
 
   return response.statusText;
 };

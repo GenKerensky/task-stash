@@ -13,15 +13,17 @@ export const taskSchemaLiteral = {
   primaryKey: 'id',
   type: 'object',
   properties: {
-    id: { type: 'string' },
+    id: { type: 'string', maxLength: 12 },
     title: { type: 'string' },
     description: { type: 'string' },
     completed: { type: 'boolean' },
     dueDate: { type: 'number' },
+    notifications: { type: 'array', items: { type: 'string' } },
+    userId: { type: 'string' },
     updatedAt: { type: 'number' },
   },
-  required: ['id', 'title'],
-  encrypted: ['title', 'description', 'completed', 'dueDate'],
+  required: ['id', 'title', 'userId'],
+  encrypted: ['title', 'description', 'completed', 'dueDate', 'notifications'],
 } as const;
 
 const schemaTyped = toTypedRxJsonSchema(taskSchemaLiteral);

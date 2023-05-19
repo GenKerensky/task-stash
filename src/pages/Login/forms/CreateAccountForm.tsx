@@ -54,15 +54,22 @@ const schema = z.object({
 
 const CreateAccountForm: Component = () => {
   const [loading, setLoading] = createSignal(false);
+  const navigator = useNavigate();
 
   const { form, data, errors, isValid } = createForm<z.infer<typeof schema>>({
     validate: validateSchema(schema),
     debounced: {
       validateTimeout: 250,
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setLoading(true);
-      return createAccount(values.email, values.password);
+      try {
+        await createAccount(values.email, values.password);
+        setLoading(false);
+        navigator('/');
+      } catch (e) {
+        console.error(e);
+      }
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onSuccess: async (response, context) => {
