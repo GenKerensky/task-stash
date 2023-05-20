@@ -2,9 +2,9 @@ import { Route, Routes } from '@solidjs/router';
 import { Box } from '@suid/material';
 import type { Component } from 'solid-js';
 
-import Layout from './pages/Layout';
-import LoginPage, { CreateAccountForm, LoginForm } from './pages/Login';
 import ReloadPrompt from './ReloadPrompt';
+import Layout from './views/Layout';
+import LoginPage, { CreateAccountForm, LoginForm } from './views/Login';
 
 const App: Component = () => (
   <>

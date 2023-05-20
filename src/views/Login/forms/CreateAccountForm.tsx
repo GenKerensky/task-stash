@@ -35,7 +35,7 @@ const BackButton: Component = () => {
   );
 };
 
-const schema = z.object({
+const createAccountFormSchema = z.object({
   email: z
     .string()
     .nonempty({ message: 'Email is required!' })
@@ -56,20 +56,18 @@ const CreateAccountForm: Component = () => {
   const [loading, setLoading] = createSignal(false);
   const navigator = useNavigate();
 
-  const { form, data, errors, isValid } = createForm<z.infer<typeof schema>>({
-    validate: validateSchema(schema),
+  const { form, data, errors, isValid } = createForm<
+    z.infer<typeof createAccountFormSchema>
+  >({
+    validate: validateSchema(createAccountFormSchema),
     debounced: {
       validateTimeout: 250,
     },
     onSubmit: async (values) => {
       setLoading(true);
-      try {
-        await createAccount(values.email, values.password);
-        setLoading(false);
-        navigator('/');
-      } catch (e) {
-        console.error(e);
-      }
+      await createAccount(values.email, values.password);
+      setLoading(false);
+      navigator('/');
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onSuccess: async (response, context) => {
