@@ -68,7 +68,7 @@ const LoginForm: Component = () => {
             label="Email"
             name="email"
             error={errors().email !== null}
-            helperText={errors().email}
+            helperText={errors().email?.[0]}
             variant="standard"
           />
         </Box>
@@ -81,7 +81,7 @@ const LoginForm: Component = () => {
             type="password"
             autoComplete="current-password"
             error={errors().password !== null}
-            helperText={errors().password}
+            helperText={errors().password?.[0]}
             variant="standard"
           />
         </Box>

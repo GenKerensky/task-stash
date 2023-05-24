@@ -48,7 +48,12 @@ const createAccountFormSchema = z.object({
         const result = zxcvbn(password);
         return result.score >= 3;
       },
-      (password) => ({ message: zxcvbn(password).feedback.warning })
+      (password) => {
+        const message = zxcvbn(password).feedback.warning;
+        return {
+          message: message || 'Password is too weak!',
+        };
+      }
     ),
 });
 
@@ -123,7 +128,7 @@ const CreateAccountForm: Component = () => {
               required
               type="email"
               error={errors().email !== null}
-              helperText={errors().email}
+              helperText={errors().email?.[0]}
               variant="standard"
             />
           </Box>
@@ -136,7 +141,7 @@ const CreateAccountForm: Component = () => {
               type="password"
               autoComplete="current-password"
               error={errors().password !== null}
-              helperText={errors().password}
+              helperText={errors().password?.[0]}
               variant="standard"
             />
           </Box>
