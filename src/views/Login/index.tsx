@@ -1,5 +1,13 @@
 import { Outlet } from '@solidjs/router';
-import { Card, Container } from '@suid/material';
+import { Check, Lock } from '@suid/icons-material';
+import {
+  Box,
+  Card,
+  Container,
+  Grid,
+  SvgIcon,
+  Typography,
+} from '@suid/material';
 import { type Component } from 'solid-js';
 
 // import { Transition } from 'solid-transition-group';
@@ -19,6 +27,38 @@ const LoginPage: Component = () => (
       justifyContent: 'center',
     }}
   >
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      padding={2}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          color: '#FFFFFFEE',
+          padding: 1,
+        }}
+      >
+        <SvgIcon fontSize="medium">
+          <Check />
+        </SvgIcon>
+        <SvgIcon fontSize="medium">
+          <Lock />
+        </SvgIcon>
+      </Box>
+      <Typography
+        variant="h1"
+        color="#FFFFFFEE"
+        textAlign="center"
+        fontSize={60}
+      >
+        Task Stash
+      </Typography>
+    </Box>
     <Card
       raised
       sx={{

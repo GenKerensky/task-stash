@@ -1,9 +1,10 @@
 import { Route, Routes } from '@solidjs/router';
-import { Box, createTheme, ThemeProvider } from '@suid/material';
+import { createTheme, ThemeProvider } from '@suid/material';
 import type { Component } from 'solid-js';
 
 import { Background } from './components/Background';
 import ReloadPrompt from './ReloadPrompt';
+import { Home } from './views/Home';
 import Layout from './views/Layout';
 import LoginPage, { CreateAccountForm, LoginForm } from './views/Login';
 
@@ -44,7 +45,7 @@ const App: Component = () => (
             <Route path="/create-account" component={CreateAccountForm} />
           </Route>
           <Route path="/" component={Layout}>
-            <Route path="/" element={<Box>Home</Box>} />
+            <Route path="/" component={Home} />
           </Route>
         </Routes>
       </Background>

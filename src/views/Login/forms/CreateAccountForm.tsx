@@ -17,7 +17,7 @@ import { type Component, createSignal, For } from 'solid-js';
 import { z } from 'zod';
 import zxcvbn, { type ZXCVBNResult } from 'zxcvbn';
 
-import { createAccount } from '../../../controlers/createAccount';
+import { createAccount } from '../../../controllers/createAccount';
 import FormContainer from '../components/FormContainer';
 import TopBar from '../components/TopBar';
 

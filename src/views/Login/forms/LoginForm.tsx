@@ -12,7 +12,7 @@ import {
 import { type Component, createSignal } from 'solid-js';
 import { z } from 'zod';
 
-import { login } from '../../../controlers/login';
+import { login } from '../../../controllers/login';
 import FormContainer from '../components/FormContainer';
 import TopBar from '../components/TopBar';
 

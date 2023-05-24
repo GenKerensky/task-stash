@@ -11,8 +11,10 @@ const offset = 1.4;
 export const Background: ParentComponent = (props) => (
   <Box
     sx={{
+      display: 'flex',
+      flexDirection: 'column',
       minHeight: '100vh',
-      background: `radial-gradient(
+      backgroundImage: `radial-gradient(
     circle at top left, 
     ${primary} ${fp(0)},
     ${primary.mix(dark, fd(1) * offset)} ${fp(1)},
