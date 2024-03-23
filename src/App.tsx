@@ -1,37 +1,54 @@
-import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import Home from './pages/Home';
+import { Route, Routes } from '@solidjs/router';
+import { createTheme, ThemeProvider } from '@suid/material';
+import type { Component } from 'solid-js';
 
-/* Core CSS required for Ionic components to work properly */
-import '@ionic/react/css/core.css';
+import { Background } from './components/Background';
+import ReloadPrompt from './ReloadPrompt';
+import { Home } from './views/Home';
+import Layout from './views/Layout';
+import LoginPage, { CreateAccountForm, LoginForm } from './views/Login';
 
-/* Basic CSS for apps built with Ionic */
-import '@ionic/react/css/normalize.css';
-import '@ionic/react/css/structure.css';
-import '@ionic/react/css/typography.css';
+const taskStashTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      // hot pink
+      main: '#ff00ff',
+    },
+    // dark desaturated violet
+    secondary: {
+      main: '#8a2be2',
+    },
+    error: {
+      // bright red
+      main: '#c90d0d',
+    },
+    // cyan
+    info: {
+      main: '#00ffea',
+    },
+    // bright, lime green
+    success: {
+      main: '#00ff95',
+    },
+  },
+});
 
-/* Optional CSS utils that can be commented out */
-import '@ionic/react/css/padding.css';
-import '@ionic/react/css/float-elements.css';
-import '@ionic/react/css/text-alignment.css';
-import '@ionic/react/css/text-transformation.css';
-import '@ionic/react/css/flex-utils.css';
-import '@ionic/react/css/display.css';
-
-/* Theme variables */
-import './theme/variables.css';
-
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Home} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+const App: Component = () => (
+  <ThemeProvider theme={taskStashTheme}>
+    <Background>
+      <ReloadPrompt />
+      <Routes>
+        <Route path="/" component={LoginPage}>
+          <Route path="/login" component={LoginForm} />
+          <Route path="/create-account" component={CreateAccountForm} />
+        </Route>
+        <Route path="/" component={Layout}>
+          <Route path="/" component={Home} />
+        </Route>
+      </Routes>
+    </Background>
+  </ThemeProvider>
 );
 
 export default App;
